@@ -21,13 +21,16 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Controls;
 
-namespace System.Windows.Controls.WpfPropertyGrid
+namespace tainicom.WpfPropertyGrid
 {
     using Design;
     using Controls;
     using System.Collections;
     using System.Windows.Data;
+    using System;
+    using System.Windows;
     /// <summary>
     /// PropertyGrid control.
     /// </summary>

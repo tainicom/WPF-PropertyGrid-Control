@@ -2,7 +2,7 @@
   x:Class="ComplexProperty.Window1"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:pg="http://schemas.denisvuyka.wordpress.com/wpfpropertygrid"
+  xmlns:pg="http://schemas.tainicom.net/wpfpropertygrid"
   xmlns:local="clr-namespace:ComplexProperty"
   Title="How do I: Edit Complex Property" Height="300" Width="360" WindowStartupLocation="CenterScreen">
   

@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +21,11 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using System.Collections.Generic;
 
-namespace System.Windows.Controls.WpfPropertyGrid
+namespace tainicom.WpfPropertyGrid
 {
   using Internal;
+    using System;
+    using System.Windows;
 
   internal static class ObjectServices
   {

@@ -1,4 +1,4 @@
-﻿using System.Windows.Controls.WpfPropertyGrid.Internal;
+﻿using tainicom.WpfPropertyGrid.Internal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace WpfPropertyGrid.UnitTests.Internal

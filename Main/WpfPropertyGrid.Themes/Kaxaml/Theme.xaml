@@ -2,8 +2,8 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:aero="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-  xmlns:pg="http://schemas.denisvuyka.wordpress.com/wpfpropertygrid"
-  xmlns:theme="clr-namespace:System.Windows.Controls.WpfPropertyGrid.Themes.Kaxaml"  
+  xmlns:pg="http://schemas.tainicom.net/wpfpropertygrid"
+  xmlns:theme="clr-namespace:tainicom.WpfPropertyGrid.Themes.Kaxaml"  
   >
   
   <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>

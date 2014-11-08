@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows;
-using System.Windows.Controls.WpfPropertyGrid;
+using tainicom.WpfPropertyGrid;
 using System.Windows.Media;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;

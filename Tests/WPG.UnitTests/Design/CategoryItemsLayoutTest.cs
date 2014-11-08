@@ -1,6 +1,6 @@
 ﻿using System.Windows;
-using System.Windows.Controls.WpfPropertyGrid;
-using System.Windows.Controls.WpfPropertyGrid.Design;
+using tainicom.WpfPropertyGrid;
+using tainicom.WpfPropertyGrid.Design;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace WpfPropertyGrid.UnitTests.Design

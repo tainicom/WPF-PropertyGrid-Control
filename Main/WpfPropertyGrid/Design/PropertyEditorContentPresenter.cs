@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +16,10 @@
  */
 
 using System.Windows.Data;
+using System.Windows.Controls;
+using System.Windows;
 
-namespace System.Windows.Controls.WpfPropertyGrid.Design
+namespace tainicom.WpfPropertyGrid.Design
 {
   /// <summary>
   /// Defines a content presenter control for a Property editor.

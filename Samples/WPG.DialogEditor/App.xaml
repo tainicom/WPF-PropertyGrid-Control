@@ -2,8 +2,8 @@
   x:Class="DialogEditor.App"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:pg="http://schemas.denisvuyka.wordpress.com/wpfpropertygrid"
-  xmlns:local="clr-namespace:DialogEditor"   
+  xmlns:pg="http://schemas.tainicom.net/wpfpropertygrid"
+  xmlns:local="clr-namespace:DialogEditor"
   StartupUri="Window1.xaml">
   <Application.Resources>
 

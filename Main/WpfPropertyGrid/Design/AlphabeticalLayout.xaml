@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary 
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
-  xmlns:design="clr-namespace:System.Windows.Controls.WpfPropertyGrid.Design">
+  xmlns:design="clr-namespace:tainicom.WpfPropertyGrid.Design">
         
   <Style TargetType="{x:Type design:AlphabeticalLayout}">
     <Setter Property="Background" Value="{Binding Background}"/>

@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +15,10 @@
  * limitations under the License.
  */
 using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
+using System.Windows;
 
-namespace System.Windows.Controls.WpfPropertyGrid.Themes.Kaxaml
+namespace tainicom.WpfPropertyGrid.Themes.Kaxaml
 {
   public class IndexingStackPanel : StackPanel
   {

@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +18,13 @@
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Data;
+using tainicom.WpfPropertyGrid;
+using tainicom.WpfPropertyGrid.Design;
+using System.Windows.Controls;
+using System.Windows;
+using System;
 
-namespace System.Windows.Controls.WpfPropertyGrid.Design
+namespace tainicom.WpfPropertyGrid.Design
 {
   /// <summary>
   /// The default tabbed layout.

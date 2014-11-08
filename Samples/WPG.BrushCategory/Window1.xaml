@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Samples.BrushCategory.Window1"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:pg="http://schemas.denisvuyka.wordpress.com/wpfpropertygrid"    
+    xmlns:pg="http://schemas.tainicom.net/wpfpropertygrid"    
     xmlns:local="clr-namespace:Samples.BrushCategory"
     Title="Brush category" Height="768" Width="1024" WindowStartupLocation="CenterScreen">
   <Grid>

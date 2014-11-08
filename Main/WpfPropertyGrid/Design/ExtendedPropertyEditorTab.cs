@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +15,10 @@
  * limitations under the License.
  */
 
-namespace System.Windows.Controls.WpfPropertyGrid.Design
+using System.Windows;
+using System.Windows.Controls;
+using System;
+namespace tainicom.WpfPropertyGrid.Design
 {
   /// <summary>
   /// Special Tab used to contain Extended Editors. Used in Tabbed Layout.

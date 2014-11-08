@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Controls.WpfPropertyGrid;
+using tainicom.WpfPropertyGrid;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace WpfPropertyGrid.UnitTests.PropertyEditing.Filters

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Windows.Controls.WpfPropertyGrid.Design;
+using tainicom.WpfPropertyGrid.Design;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace WpfPropertyGrid.UnitTests.Layout

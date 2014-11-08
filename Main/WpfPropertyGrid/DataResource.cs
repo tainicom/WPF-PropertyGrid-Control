@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +18,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Markup;
+using System.Windows;
+using System;
 
-namespace System.Windows.Controls.WpfPropertyGrid
+namespace tainicom.WpfPropertyGrid
 {
   /// <summary>
   /// Defines a helper object for binding to CLR properties.

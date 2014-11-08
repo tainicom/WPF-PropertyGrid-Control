@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Controls.WpfPropertyGrid;
+using tainicom.WpfPropertyGrid;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace WpfPropertyGrid.UnitTests
