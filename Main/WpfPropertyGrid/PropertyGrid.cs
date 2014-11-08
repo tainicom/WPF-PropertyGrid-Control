@@ -26,6 +26,8 @@ namespace System.Windows.Controls.WpfPropertyGrid
 {
     using Design;
     using Controls;
+    using System.Collections;
+    using System.Windows.Data;
     /// <summary>
     /// PropertyGrid control.
     /// </summary>
@@ -77,7 +79,7 @@ namespace System.Windows.Controls.WpfPropertyGrid
                 browsableProperties = new List<BrowsablePropertyAttribute>(propertyAttributes);
 
                 // Collect categories and properties
-                var properties = CollectProperties(_selectedObjects);
+                var properties = CollectProperties(SelectedObjects);
 
                 // TODO: This needs more elegant implementation
                 var categories = new GridEntryCollection<CategoryItem>(CollectCategories(properties));
@@ -180,92 +182,73 @@ namespace System.Windows.Controls.WpfPropertyGrid
 
 
 
-        #region SelectedObject
+        #region SelectedObjects
+
         /// <summary>
         /// Gets or sets the selected object.
         /// </summary>
         /// <value>The selected object.</value>
         public object SelectedObject
         {
-            get { return (_selectedObjects != null && _selectedObjects.Length != 0) ? _selectedObjects[0] : null; }
-            set { SelectedObjects = (value == null) ? new object[0] : new[] { value }; }
+            get { return (SelectedObjects != null && SelectedObjects.Count != 0) ? SelectedObjects[0] : null; }
+            set 
+            {
+                if (BindingOperations.IsDataBound(this, SelectedObjectsProperty))
+                    throw new Exception("Setting 'SelectedObject' is not allowed. 'SelectedObjects' has Binding.");
+                SelectedObjects = (value == null) ? new List<object>(0): new List<object>() { value }; 
+            }
         }
-        #endregion
 
-        #region SelectedObjects
-
-        private object[] _selectedObjects;
-
-
+        public static readonly DependencyProperty SelectedObjectsProperty = DependencyProperty.Register(
+                    "SelectedObjects",
+                    typeof (IList<object>),
+                    typeof (PropertyGrid),
+                    new PropertyMetadata(new List<object>(), OnSelectedObjectsChanged));
+ 
         /// <summary>
         /// Gets or sets the selected objects.
         /// </summary>
         /// <value>The selected objects.</value>
-        public object[] SelectedObjects
+        public IList<object> SelectedObjects
         {
-            get { return (_selectedObjects == null) ? new object[0] : (object[])_selectedObjects.Clone(); }
-            set
-            {
-                // Ensure there are no nulls in the array
-                VerifySelectedObjects(value);
-
-                var sameSelection = false;
+            get { return (IList<object>)GetValue(SelectedObjectsProperty); }
+            set 
+            {   
+                VerifySelectedObjects(value); // Ensure there are no nulls in the array                
 
                 // Check whether new selection is the same as was previously defined
-                if (_selectedObjects != null && value != null && _selectedObjects.Length == value.Length)
+                if (SelectedObjects != null && value != null && SelectedObjects.Count == value.Count)
                 {
-                    sameSelection = true;
-
-                    for (var i = 0; i < value.Length && sameSelection; i++)
+                    bool sameSelection = true;
+                    for (var i = 0; i < value.Count; i++)
                     {
-                        if (_selectedObjects[i] != value[i])
-                            sameSelection = false;
+                        if (SelectedObjects[i] == value[i]) continue;
+                        sameSelection = false;
+                        break;
                     }
+                    if (sameSelection) return;
                 }
 
-                if (!sameSelection)
+                if (value == null)
                 {
-                    // Assign new objects and reload
-                    if (value == null)
-                    {
-                        _selectedObjects = new object[0];
-                        DoReload();
-                    }
-                    else
-                    {
-                        // process single selection
-                        if (value.Length == 1 && _selectedObjects != null && _selectedObjects.Length == 1)
-                        {
-                            var oldValue = (_selectedObjects != null && _selectedObjects.Length > 0) ? _selectedObjects[0] : null;
-                            var newValue = (value.Length > 0) ? value[0] : null;
-
-                            _selectedObjects = (object[])value.Clone();
-
-                            if (oldValue != null && newValue != null && oldValue.GetType().Equals(newValue.GetType()))
-                                SwapSelectedObject(newValue);
-                            else
-                            {
-                                DoReload();
-                            }
-                        }
-                        // process multiple selection
-                        else
-                        {
-                            _selectedObjects = (object[])value.Clone();
-                            DoReload();
-                        }
-                    }
-
-                    OnPropertyChanged("SelectedObjects");
-                    OnPropertyChanged("SelectedObject");
-                    OnSelectedObjectsChanged();
+                    SetValue(SelectedObjectsProperty, new List<object>(0));
+                    return;
                 }
-                else
-                {
-                    // TODO: Swap multiple objects here? Guess nothing can be done in this case...
-                }
+
+                SetValue(SelectedObjectsProperty, value);
+                return;
             }
         }
+
+        private static void OnSelectedObjectsChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            PropertyGrid _this = (PropertyGrid)sender;
+            _this.DoReload();
+            _this.OnPropertyChanged("SelectedObjects");
+            _this.OnPropertyChanged("SelectedObject");   
+            _this.OnSelectedObjectsChanged();
+        }
+       
         #endregion
 
         #region Properties
@@ -340,6 +323,8 @@ namespace System.Windows.Controls.WpfPropertyGrid
         public PropertyGrid()
         {
             EventManager.RegisterClassHandler(typeof(PropertyGrid), GotFocusEvent, new RoutedEventHandler(ShowDescription), true);
+
+            SelectedObjects = new List<object>();
 
             // Assign Layout to be Alphabetical by default
             Layout = new AlphabeticalLayout();
@@ -838,8 +823,8 @@ namespace System.Windows.Controls.WpfPropertyGrid
 
             //PropertyItem item = new PropertyItem(this, this.SelectedObject, descriptor);      
 
-            var item = (_selectedObjects.Length > 1)
-              ? new PropertyItem(this, _selectedObjects, descriptor)
+            var item = (SelectedObjects.Count > 1)
+              ? new PropertyItem(this, SelectedObjects, descriptor)
               : new PropertyItem(this, SelectedObject, descriptor);
 
             //item.OverrideIsBrowsable(new bool?(ShoudDisplayProperty(descriptor)));
@@ -905,15 +890,6 @@ namespace System.Windows.Controls.WpfPropertyGrid
             return null;
         }
 
-        private void SwapSelectedObject(object value)
-        {
-            //foreach (PropertyItem property in this.Properties)
-            //{
-            //  property.SetPropertySouce(value);
-            //}
-            DoReload();
-        }
-
         private IEnumerable<CategoryItem> CollectCategories(IEnumerable<PropertyItem> properties)
         {
             var categories = new Dictionary<string, CategoryItem>();
@@ -945,9 +921,9 @@ namespace System.Windows.Controls.WpfPropertyGrid
             return categories.Values.ToList();
         }
 
-        private IEnumerable<PropertyItem> CollectProperties(object[] components)
+        private IEnumerable<PropertyItem> CollectProperties(IList<object> components)
         {
-            if (components == null || components.Length == 0) throw new ArgumentNullException("components");
+            if (components == null || components.Count == 0) throw new ArgumentNullException("components");
 
             // This is an obsolete code left for performance improvements demo. Will be removed in the future versions.
             /*
@@ -957,7 +933,7 @@ namespace System.Windows.Controls.WpfPropertyGrid
             */
 
             // TODO: PropertyItem is to be wired with PropertyData rather than pure PropertyDescriptor in the next version!
-            var descriptors = (components.Length == 1)
+            var descriptors = (components.Count == 1)
               ? MetadataRepository.GetProperties(components[0]).Select(prop => prop.Descriptor)
               : ObjectServices.GetMergedProperties(components);
 
@@ -994,21 +970,18 @@ namespace System.Windows.Controls.WpfPropertyGrid
         }
         */
 
-        private static void VerifySelectedObjects(object[] value)
+        private static void VerifySelectedObjects(IList<object> value)
         {
-            if (value != null && value.Length > 0)
+            if (value == null || value.Count == 0) return;
+            // Ensure there are no nulls in the array
+            for (var i = 0; i < value.Count; i++)
             {
-                // Ensure there are no nulls in the array
-                for (var i = 0; i < value.Length; i++)
-                {
-                    if (value[i] == null)
-                    {
-                        var args = new object[] { i.ToString(CultureInfo.CurrentCulture), value.Length.ToString(CultureInfo.CurrentCulture) };
-                        // TODO: Move exception format to resources/settings!
-                        throw new ArgumentNullException(string.Format("Item {0} in the 'objs' array is null. The array must begin with at least {1} members.", args));
-                    }
-                }
+                if (value[i] != null) continue;
+                var args = new object[] { i.ToString(CultureInfo.CurrentCulture), value.Count.ToString(CultureInfo.CurrentCulture) };
+                // TODO: Move exception format to resources/settings!
+                throw new ArgumentNullException(string.Format("Item {0} in the 'objs' array is null. The array must begin with at least {1} members.", args));
             }
+            return;
         }
         /// <summary>
         /// Invoked when an unhandled <see cref="UIElement.KeyDown"/> attached event reaches an element in its route that is derived from this class. Implement this method to add class handling for this event.
