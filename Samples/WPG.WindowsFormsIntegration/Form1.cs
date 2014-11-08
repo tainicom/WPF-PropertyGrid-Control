@@ -10,9 +10,9 @@ namespace WindowsFormsIntegration
 
       var host = new System.Windows.Forms.Integration.ElementHost { Dock = DockStyle.Fill };
 
-      var wpg = new System.Windows.Controls.WpfPropertyGrid.PropertyGrid
+      var wpg = new tainicom.WpfPropertyGrid.PropertyGrid
       {
-        Layout = new System.Windows.Controls.WpfPropertyGrid.Design.CategorizedLayout()
+        Layout = new tainicom.WpfPropertyGrid.Design.CategorizedLayout()
       };
       host.Child = wpg;
 

@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using System.Windows.Controls.WpfPropertyGrid;
+using tainicom.WpfPropertyGrid;
 using Microsoft.Win32;
 
 namespace DialogEditor

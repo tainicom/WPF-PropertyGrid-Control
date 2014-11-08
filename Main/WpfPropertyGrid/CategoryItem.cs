@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +18,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System;
 
-namespace System.Windows.Controls.WpfPropertyGrid
+namespace tainicom.WpfPropertyGrid
 {
   /// <summary>
   /// Special grid entry that provides information about property category and gives access to underlying properties.

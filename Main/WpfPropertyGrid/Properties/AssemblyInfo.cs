@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,9 +75,9 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyFileVersion("2010.11.10")]
 [assembly: CLSCompliant(true)]
 
-[assembly: XmlnsDefinition("http://schemas.denisvuyka.wordpress.com/wpfpropertygrid", "System.Windows.Controls.WpfPropertyGrid")]
-[assembly: XmlnsDefinition("http://schemas.denisvuyka.wordpress.com/wpfpropertygrid", "System.Windows.Controls.WpfPropertyGrid.Controls")]
-[assembly: XmlnsDefinition("http://schemas.denisvuyka.wordpress.com/wpfpropertygrid", "System.Windows.Controls.WpfPropertyGrid.Design")]
+[assembly: XmlnsDefinition("http://schemas.tainicom.net/wpfpropertygrid", "tainicom.WpfPropertyGrid")]
+[assembly: XmlnsDefinition("http://schemas.tainicom.net/wpfpropertygrid", "tainicom.WpfPropertyGrid.Controls")]
+[assembly: XmlnsDefinition("http://schemas.tainicom.net/wpfpropertygrid", "tainicom.WpfPropertyGrid.Design")]
 
 // http://msdn.microsoft.com/en-us/library/system.runtime.compilerservices.internalsvisibletoattribute.aspx
 [assembly: InternalsVisibleTo("WpfPropertyGrid.UnitTests, PublicKey=00240000048000009400000006020000002400005253413100040000010001004da09578b80bee870f7d2419e782b0e9b817e2c2cd8864f642212da0efafd446cea165f9bd4714b8e1dcaa7420b9f2ad0efa0b41d0e6e8a5928d8b8c97c5734aab7c7e810573646cc34e3b0ab74d62e9adb57da175f9bca9bdc13658b0536fed45fc96dd284e789ce06ccf7746f2298d8e04c791cfd334ebb0bf9e31f7b5ced9")]

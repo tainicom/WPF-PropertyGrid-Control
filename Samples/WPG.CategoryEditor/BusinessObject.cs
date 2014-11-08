@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Controls.WpfPropertyGrid;
+using tainicom.WpfPropertyGrid;
 
 namespace CategoryEditor
 {

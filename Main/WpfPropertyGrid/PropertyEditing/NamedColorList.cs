@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@ using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Windows.Media;
 
-namespace System.Windows.Controls.WpfPropertyGrid
+namespace tainicom.WpfPropertyGrid
 {
   /// <summary>
   /// Provides a list of colors that is possible to bind to UI

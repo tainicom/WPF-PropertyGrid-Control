@@ -1,4 +1,4 @@
-﻿using System.Windows.Controls.WpfPropertyGrid;
+﻿using tainicom.WpfPropertyGrid;
 using System.ComponentModel;
 
 namespace DialogEditor

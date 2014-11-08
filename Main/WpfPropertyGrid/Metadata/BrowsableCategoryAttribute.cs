@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace System.Windows.Controls.WpfPropertyGrid
+using System;
+namespace tainicom.WpfPropertyGrid
 {
   /// <summary>
   /// Controls the Browsable state of the category with corresponding properties.

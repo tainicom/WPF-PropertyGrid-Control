@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +17,10 @@
 
 using System.Windows.Input;
 using System.Windows.Data;
+using System.Windows;
+using System.Windows.Controls;
 
-namespace System.Windows.Controls.WpfPropertyGrid
+namespace tainicom.WpfPropertyGrid
 {
     /// <summary>
     /// Provides additional facilities for TextBox control.  

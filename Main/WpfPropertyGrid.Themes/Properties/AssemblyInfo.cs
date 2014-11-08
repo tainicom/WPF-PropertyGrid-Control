@@ -55,4 +55,4 @@ using System.Windows.Markup;
 [assembly: AssemblyVersion("2010.11.10")]
 [assembly: AssemblyFileVersion("2010.11.10")]
 
-[assembly: XmlnsDefinition("http://schemas.denisvuyka.wordpress.com/wpfpropertygrid", "System.Windows.Controls.WpfPropertyGrid.Themes")]
+[assembly: XmlnsDefinition("http://schemas.tainicom.net/wpfpropertygrid", "tainicom.WpfPropertyGrid.Themes")]

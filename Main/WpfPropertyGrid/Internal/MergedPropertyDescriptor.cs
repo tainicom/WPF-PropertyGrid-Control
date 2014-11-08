@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +23,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System;
 
-namespace System.Windows.Controls.WpfPropertyGrid.Internal
+namespace tainicom.WpfPropertyGrid.Internal
 {
   [DebuggerDisplay("{Name}")]
   internal class MergedPropertyDescriptor : PropertyDescriptor

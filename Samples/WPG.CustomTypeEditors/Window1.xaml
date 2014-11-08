@@ -2,7 +2,7 @@
   x:Class="Sample4.CustomTypeEditors.Window1"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:pg="http://schemas.denisvuyka.wordpress.com/wpfpropertygrid"    
+  xmlns:pg="http://schemas.tainicom.net/wpfpropertygrid"    
   xmlns:local="clr-namespace:Sample4.CustomTypeEditors"  
   xmlns:core="clr-namespace:System;assembly=mscorlib"
   xmlns:markup="clr-namespace:System.Windows.Markup;assembly=PresentationCore"

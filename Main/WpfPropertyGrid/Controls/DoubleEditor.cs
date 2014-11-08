@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@
  * limitations under the License.
  */
 
+using System;
 using System.ComponentModel;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows;
 
-namespace System.Windows.Controls.WpfPropertyGrid.Controls
+namespace tainicom.WpfPropertyGrid.Controls
 {
   /// <summary>
   /// Simple Expression Blend like double editor.

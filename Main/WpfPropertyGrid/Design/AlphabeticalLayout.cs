@@ -1,5 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
+ * Copyright © 2014, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +15,9 @@
  * limitations under the License.
  */
 
-namespace System.Windows.Controls.WpfPropertyGrid.Design
+using System.Windows.Controls;
+using System.Windows;
+namespace tainicom.WpfPropertyGrid.Design
 {
   /// <summary>
   /// The default alphabetical view for properties.

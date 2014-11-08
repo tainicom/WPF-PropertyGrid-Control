@@ -3,15 +3,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <ResourceDictionary.MergedDictionaries>
     
-    <ResourceDictionary Source="/System.Windows.Controls.WpfPropertyGrid;component/Themes/EditorResources.xaml"/>
-    <ResourceDictionary Source="/System.Windows.Controls.WpfPropertyGrid;component/Themes/SearchTextBox.xaml"/>
+    <ResourceDictionary Source="/tainicom.WpfPropertyGrid;component/Themes/EditorResources.xaml"/>
+    <ResourceDictionary Source="/tainicom.WpfPropertyGrid;component/Themes/SearchTextBox.xaml"/>
 
-    <ResourceDictionary Source="/System.Windows.Controls.WpfPropertyGrid;component/Themes/DoubleEditor.xaml"/>
-    <ResourceDictionary Source="/System.Windows.Controls.WpfPropertyGrid;component/Themes/PropertyGrid.xaml"/>
+    <ResourceDictionary Source="/tainicom.WpfPropertyGrid;component/Themes/DoubleEditor.xaml"/>
+    <ResourceDictionary Source="/tainicom.WpfPropertyGrid;component/Themes/PropertyGrid.xaml"/>
 
-    <ResourceDictionary Source="/System.Windows.Controls.WpfPropertyGrid;component/Design/AlphabeticalLayout.xaml"/>
-    <ResourceDictionary Source="/System.Windows.Controls.WpfPropertyGrid;component/Design/CategorizedLayout.xaml"/>
-    <ResourceDictionary Source="/System.Windows.Controls.WpfPropertyGrid;component/Design/TabbedLayout.xaml"/>
+    <ResourceDictionary Source="/tainicom.WpfPropertyGrid;component/Design/AlphabeticalLayout.xaml"/>
+    <ResourceDictionary Source="/tainicom.WpfPropertyGrid;component/Design/CategorizedLayout.xaml"/>
+    <ResourceDictionary Source="/tainicom.WpfPropertyGrid;component/Design/TabbedLayout.xaml"/>
 
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
