@@ -77,7 +77,7 @@ namespace System.Windows.Controls.WpfPropertyGrid
                 browsableProperties = new List<BrowsablePropertyAttribute>(propertyAttributes);
 
                 // Collect categories and properties
-                var properties = CollectProperties(currentObjects);
+                var properties = CollectProperties(_selectedObjects);
 
                 // TODO: This needs more elegant implementation
                 var categories = new GridEntryCollection<CategoryItem>(CollectCategories(properties));
@@ -135,9 +135,7 @@ namespace System.Windows.Controls.WpfPropertyGrid
 
         private List<BrowsablePropertyAttribute> browsableProperties = new List<BrowsablePropertyAttribute>();
         private List<BrowsableCategoryAttribute> browsableCategories = new List<BrowsableCategoryAttribute>();
-
-        private object[] currentObjects;
-
+        
         #endregion
 
         #region Events
@@ -189,19 +187,23 @@ namespace System.Windows.Controls.WpfPropertyGrid
         /// <value>The selected object.</value>
         public object SelectedObject
         {
-            get { return (currentObjects != null && currentObjects.Length != 0) ? currentObjects[0] : null; }
+            get { return (_selectedObjects != null && _selectedObjects.Length != 0) ? _selectedObjects[0] : null; }
             set { SelectedObjects = (value == null) ? new object[0] : new[] { value }; }
         }
         #endregion
 
         #region SelectedObjects
+
+        private object[] _selectedObjects;
+
+
         /// <summary>
         /// Gets or sets the selected objects.
         /// </summary>
         /// <value>The selected objects.</value>
         public object[] SelectedObjects
         {
-            get { return (currentObjects == null) ? new object[0] : (object[])currentObjects.Clone(); }
+            get { return (_selectedObjects == null) ? new object[0] : (object[])_selectedObjects.Clone(); }
             set
             {
                 // Ensure there are no nulls in the array
@@ -210,13 +212,13 @@ namespace System.Windows.Controls.WpfPropertyGrid
                 var sameSelection = false;
 
                 // Check whether new selection is the same as was previously defined
-                if (currentObjects != null && value != null && currentObjects.Length == value.Length)
+                if (_selectedObjects != null && value != null && _selectedObjects.Length == value.Length)
                 {
                     sameSelection = true;
 
                     for (var i = 0; i < value.Length && sameSelection; i++)
                     {
-                        if (currentObjects[i] != value[i])
+                        if (_selectedObjects[i] != value[i])
                             sameSelection = false;
                     }
                 }
@@ -226,18 +228,18 @@ namespace System.Windows.Controls.WpfPropertyGrid
                     // Assign new objects and reload
                     if (value == null)
                     {
-                        currentObjects = new object[0];
+                        _selectedObjects = new object[0];
                         DoReload();
                     }
                     else
                     {
                         // process single selection
-                        if (value.Length == 1 && currentObjects != null && currentObjects.Length == 1)
+                        if (value.Length == 1 && _selectedObjects != null && _selectedObjects.Length == 1)
                         {
-                            var oldValue = (currentObjects != null && currentObjects.Length > 0) ? currentObjects[0] : null;
+                            var oldValue = (_selectedObjects != null && _selectedObjects.Length > 0) ? _selectedObjects[0] : null;
                             var newValue = (value.Length > 0) ? value[0] : null;
 
-                            currentObjects = (object[])value.Clone();
+                            _selectedObjects = (object[])value.Clone();
 
                             if (oldValue != null && newValue != null && oldValue.GetType().Equals(newValue.GetType()))
                                 SwapSelectedObject(newValue);
@@ -249,7 +251,7 @@ namespace System.Windows.Controls.WpfPropertyGrid
                         // process multiple selection
                         else
                         {
-                            currentObjects = (object[])value.Clone();
+                            _selectedObjects = (object[])value.Clone();
                             DoReload();
                         }
                     }
@@ -836,8 +838,8 @@ namespace System.Windows.Controls.WpfPropertyGrid
 
             //PropertyItem item = new PropertyItem(this, this.SelectedObject, descriptor);      
 
-            var item = (currentObjects.Length > 1)
-              ? new PropertyItem(this, currentObjects, descriptor)
+            var item = (_selectedObjects.Length > 1)
+              ? new PropertyItem(this, _selectedObjects, descriptor)
               : new PropertyItem(this, SelectedObject, descriptor);
 
             //item.OverrideIsBrowsable(new bool?(ShoudDisplayProperty(descriptor)));
