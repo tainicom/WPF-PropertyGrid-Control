@@ -183,11 +183,87 @@ namespace System.Windows.Controls.WpfPropertyGrid
 
 
         #region SelectedObject
-
+        /// <summary>
+        /// Gets or sets the selected object.
+        /// </summary>
+        /// <value>The selected object.</value>
+        public object SelectedObject
+        {
+            get { return (currentObjects != null && currentObjects.Length != 0) ? currentObjects[0] : null; }
+            set { SelectedObjects = (value == null) ? new object[0] : new[] { value }; }
+        }
         #endregion
 
         #region SelectedObjects
+        /// <summary>
+        /// Gets or sets the selected objects.
+        /// </summary>
+        /// <value>The selected objects.</value>
+        public object[] SelectedObjects
+        {
+            get { return (currentObjects == null) ? new object[0] : (object[])currentObjects.Clone(); }
+            set
+            {
+                // Ensure there are no nulls in the array
+                VerifySelectedObjects(value);
 
+                var sameSelection = false;
+
+                // Check whether new selection is the same as was previously defined
+                if (currentObjects != null && value != null && currentObjects.Length == value.Length)
+                {
+                    sameSelection = true;
+
+                    for (var i = 0; i < value.Length && sameSelection; i++)
+                    {
+                        if (currentObjects[i] != value[i])
+                            sameSelection = false;
+                    }
+                }
+
+                if (!sameSelection)
+                {
+                    // Assign new objects and reload
+                    if (value == null)
+                    {
+                        currentObjects = new object[0];
+                        DoReload();
+                    }
+                    else
+                    {
+                        // process single selection
+                        if (value.Length == 1 && currentObjects != null && currentObjects.Length == 1)
+                        {
+                            var oldValue = (currentObjects != null && currentObjects.Length > 0) ? currentObjects[0] : null;
+                            var newValue = (value.Length > 0) ? value[0] : null;
+
+                            currentObjects = (object[])value.Clone();
+
+                            if (oldValue != null && newValue != null && oldValue.GetType().Equals(newValue.GetType()))
+                                SwapSelectedObject(newValue);
+                            else
+                            {
+                                DoReload();
+                            }
+                        }
+                        // process multiple selection
+                        else
+                        {
+                            currentObjects = (object[])value.Clone();
+                            DoReload();
+                        }
+                    }
+
+                    OnPropertyChanged("SelectedObjects");
+                    OnPropertyChanged("SelectedObject");
+                    OnSelectedObjectsChanged();
+                }
+                else
+                {
+                    // TODO: Swap multiple objects here? Guess nothing can be done in this case...
+                }
+            }
+        }
         #endregion
 
         #region Properties
@@ -451,85 +527,9 @@ namespace System.Windows.Controls.WpfPropertyGrid
         }
 
 
-        /// <summary>
-        /// Gets or sets the selected object.
-        /// </summary>
-        /// <value>The selected object.</value>
-        public object SelectedObject
-        {
-            get { return (currentObjects != null && currentObjects.Length != 0) ? currentObjects[0] : null; }
-            set { SelectedObjects = (value == null) ? new object[0] : new[] { value }; }
-        }
 
-        /// <summary>
-        /// Gets or sets the selected objects.
-        /// </summary>
-        /// <value>The selected objects.</value>
-        public object[] SelectedObjects
-        {
-            get { return (currentObjects == null) ? new object[0] : (object[])currentObjects.Clone(); }
-            set
-            {
-                // Ensure there are no nulls in the array
-                VerifySelectedObjects(value);
 
-                var sameSelection = false;
-
-                // Check whether new selection is the same as was previously defined
-                if (currentObjects != null && value != null && currentObjects.Length == value.Length)
-                {
-                    sameSelection = true;
-
-                    for (var i = 0; i < value.Length && sameSelection; i++)
-                    {
-                        if (currentObjects[i] != value[i])
-                            sameSelection = false;
-                    }
-                }
-
-                if (!sameSelection)
-                {
-                    // Assign new objects and reload
-                    if (value == null)
-                    {
-                        currentObjects = new object[0];
-                        DoReload();
-                    }
-                    else
-                    {
-                        // process single selection
-                        if (value.Length == 1 && currentObjects != null && currentObjects.Length == 1)
-                        {
-                            var oldValue = (currentObjects != null && currentObjects.Length > 0) ? currentObjects[0] : null;
-                            var newValue = (value.Length > 0) ? value[0] : null;
-
-                            currentObjects = (object[])value.Clone();
-
-                            if (oldValue != null && newValue != null && oldValue.GetType().Equals(newValue.GetType()))
-                                SwapSelectedObject(newValue);
-                            else
-                            {
-                                DoReload();
-                            }
-                        }
-                        // process multiple selection
-                        else
-                        {
-                            currentObjects = (object[])value.Clone();
-                            DoReload();
-                        }
-                    }
-
-                    OnPropertyChanged("SelectedObjects");
-                    OnPropertyChanged("SelectedObject");
-                    OnSelectedObjectsChanged();
-                }
-                else
-                {
-                    // TODO: Swap multiple objects here? Guess nothing can be done in this case...
-                }
-            }
-        }
+        
 
         private GridEntryCollection<PropertyItem> _properties;
         /// <summary>
