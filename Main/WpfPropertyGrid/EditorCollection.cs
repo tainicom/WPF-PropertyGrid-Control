@@ -193,16 +193,16 @@ namespace tainicom.WpfPropertyGrid
         if (editor != null) return editor;
       }
 
-      if (propertyItem.PropertyValue.HasSubProperties)
-        return new TypeEditor(propertyItem.PropertyType, EditorKeys.ComplexPropertyEditorKey);
-
       bool hasType = propertyItem.PropertyType != null;
-
+        
       if (hasType)
       {
         editor = FindTypeEditor(propertyItem.PropertyType);
         if (editor != null) return editor;
       }
+
+      if (propertyItem.PropertyValue.HasSubProperties)
+        return new TypeEditor(propertyItem.PropertyType, EditorKeys.ComplexPropertyEditorKey);
 
       if (hasType)
       {
