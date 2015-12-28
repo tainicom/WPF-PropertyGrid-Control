@@ -15,7 +15,7 @@
     <Expander>
       <Expander.Header>
         <TextBox Text="{Binding Value, Mode=OneWay}" IsEnabled="False"
-                 Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Mode=OneWay, Path=ActualWidth, Converter={StaticResource expanderHeaderWidthConverter}, ConverterParameter=-29}"/>
+                 MinWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Mode=OneWay, Path=ActualWidth, Converter={StaticResource expanderHeaderWidthConverter}, ConverterParameter=-27}"/>
       </Expander.Header>
       <design:PropertyItemsLayout Grid.IsSharedSizeScope="True" ItemsSource="{Binding SubProperties}"/>
     </Expander>
