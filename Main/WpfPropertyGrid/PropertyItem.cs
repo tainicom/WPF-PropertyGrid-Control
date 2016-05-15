@@ -322,8 +322,9 @@ namespace tainicom.WpfPropertyGrid
     {
       get
       {
-        if (Converter.GetStandardValuesSupported())
-          return Converter.GetStandardValues();
+          var context = new TypeDescriptorContext(this);
+          if (Converter.GetStandardValuesSupported(context))
+              return Converter.GetStandardValues(context);
 
         return new ArrayList(0);
       }

@@ -194,6 +194,9 @@ namespace tainicom.WpfPropertyGrid
       }
 
       bool hasType = propertyItem.PropertyType != null;
+
+      var context = new TypeDescriptorContext(propertyItem);
+      var hasExclusiveStandardValues = propertyItem.Converter.GetStandardValuesExclusive(context);
         
       if (hasType)
       {
@@ -210,6 +213,12 @@ namespace tainicom.WpfPropertyGrid
         {
           if (cachedEditor.Key.IsAssignableFrom(propertyItem.PropertyType))
             return cachedEditor.Value;
+        }
+        
+        if (hasExclusiveStandardValues)
+        {
+            var standardValues = propertyItem.Converter.GetStandardValues(context);
+            return new TypeEditor(propertyItem.PropertyType, EditorKeys.EnumEditorKey);
         }
 
         return new TypeEditor(propertyItem.PropertyType, EditorKeys.DefaultEditorKey);
