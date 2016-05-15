@@ -85,13 +85,14 @@ namespace tainicom.WpfPropertyGrid
       if (property == null) throw new ArgumentNullException("property");
       this._property = property;
 
-      _hasSubProperties = property.Converter.GetPropertiesSupported();
+      var context = new TypeDescriptorContext(property);
+      _hasSubProperties = property.Converter.GetPropertiesSupported(context);
 
       if (_hasSubProperties)
       {
         object value = property.GetValue();
 
-        PropertyDescriptorCollection descriptors = property.Converter.GetProperties(value);
+        PropertyDescriptorCollection descriptors = property.Converter.GetProperties(context, value); 
         foreach (PropertyDescriptor d in descriptors)
         {
           _subProperties.Add(new PropertyItem(property.Owner, value, d));  

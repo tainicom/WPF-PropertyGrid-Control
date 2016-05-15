@@ -186,6 +186,7 @@
     <Compile Include="PropertyEditor.cs" />
     <Compile Include="GridEntry.cs" />
     <Compile Include="ResourceLocator.cs" />
+    <Compile Include="TypeDescriptorContext.cs" />
     <Compile Include="TypeEditor.cs" />
     <Compile Include="PropertyValueChangedEventArgs.cs" />
     <Compile Include="Input\PropertyEditorCommands.cs" />
