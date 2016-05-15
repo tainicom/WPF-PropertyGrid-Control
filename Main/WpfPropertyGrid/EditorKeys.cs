@@ -35,6 +35,7 @@ namespace tainicom.WpfPropertyGrid
     private static readonly ComponentResourceKey _BrushEditorKey = new ComponentResourceKey(ThisType, "BrushEditor");
     private static readonly ComponentResourceKey _DefaultCategoryEditorKey = new ComponentResourceKey(ThisType, "DefaultCategoryEditor");
     private static readonly ComponentResourceKey _ComplexPropertyEditorKey = new ComponentResourceKey(ThisType, "ComplexPropertyEditor");
+    private static readonly ComponentResourceKey _ComplexPropertyEnumEditorKey = new ComponentResourceKey(ThisType, "ComplexPropertyEnumEditor");
 
     /// <summary>
     /// Gets the NamedColor editor key.
@@ -100,5 +101,10 @@ namespace tainicom.WpfPropertyGrid
     /// Gets the default complex property editor key.
     /// </summary>
     public static ComponentResourceKey ComplexPropertyEditorKey { get { return _ComplexPropertyEditorKey; } }
+      
+    /// <summary>
+    /// Gets the default complex property enum editor key.
+    /// </summary>
+    public static ComponentResourceKey ComplexPropertyEnumEditorKey { get { return _ComplexPropertyEnumEditorKey; } }
   }
 }

@@ -205,7 +205,15 @@ namespace tainicom.WpfPropertyGrid
       }
 
       if (propertyItem.PropertyValue.HasSubProperties)
-        return new TypeEditor(propertyItem.PropertyType, EditorKeys.ComplexPropertyEditorKey);
+      {
+          if (hasExclusiveStandardValues)
+          {
+              var standardValues = propertyItem.Converter.GetStandardValues(context);
+              return new TypeEditor(propertyItem.PropertyType, EditorKeys.ComplexPropertyEnumEditorKey);
+          }
+
+          return new TypeEditor(propertyItem.PropertyType, EditorKeys.ComplexPropertyEditorKey);
+      }
 
       if (hasType)
       {

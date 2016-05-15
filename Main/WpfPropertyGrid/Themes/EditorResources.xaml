@@ -37,6 +37,26 @@
 			/>
   </DataTemplate>
 
+    <DataTemplate x:Key="{x:Static local:EditorKeys.ComplexPropertyEnumEditorKey}">
+        <Expander>
+            <Expander.Header>
+                <controls:EnumDropdown
+                  x:Name="PART_editor"
+                  Style="{DynamicResource {x:Type ComboBox}}"
+                  PropertyValue="{Binding}"
+                  IsEnabled="{Binding IsEditable}"
+                  MinWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Mode=OneWay, Path=ActualWidth, Converter={StaticResource expanderHeaderWidthConverter}, ConverterParameter=-27}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource enumValueConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </controls:EnumDropdown>
+            </Expander.Header>
+            <design:PropertyItemsLayout Grid.IsSharedSizeScope="True" ItemsSource="{Binding SubProperties}"/>
+        </Expander>
+    </DataTemplate>
+
   <DataTemplate x:Key="{x:Static local:EditorKeys.EnumEditorKey}">
     <controls:EnumDropdown
       x:Name="PART_editor"
