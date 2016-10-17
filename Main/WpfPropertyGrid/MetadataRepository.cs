@@ -1,6 +1,6 @@
 ﻿/*
  * Copyright © 2010, Denys Vuika
- * Copyright © 2014, Kastellanos Nikolaos
+ * Copyright © 2014-2016, Kastellanos Nikolaos
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -258,6 +258,24 @@ namespace tainicom.WpfPropertyGrid
           result.Add(descriptor.Name, new PropertyData(descriptor));
           CollectAttributes(target, descriptor);
         }
+
+        // get non-public browsable properties
+        foreach (var propertyInfo in targetType.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic))
+        {
+            var browsable = false;
+            foreach(var attribute in propertyInfo.GetCustomAttributes(true))
+            {
+                if (attribute is BrowsableAttribute && ((BrowsableAttribute)attribute).Browsable)
+                    browsable = true;
+                if (attribute is EditorBrowsableAttribute && ((EditorBrowsableAttribute)attribute).State != EditorBrowsableState.Never)
+                    browsable = true;
+            }
+            if (!browsable) continue;
+            var descriptor = new tainicom.WpfPropertyGrid.Internal.NonPublicPropertyDescriptor(propertyInfo);
+            result.Add(descriptor.Name, new PropertyData(descriptor));
+            CollectAttributes(target, descriptor);
+        }
+
 
         Properties.Add(targetType, result);
       }

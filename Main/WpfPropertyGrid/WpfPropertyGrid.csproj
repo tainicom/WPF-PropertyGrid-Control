@@ -176,6 +176,7 @@
     <Compile Include="Editor.cs" />
     <Compile Include="EditorKeys.cs" />
     <Compile Include="GridEntryCollection.cs" />
+    <Compile Include="Internal\NonPublicPropertyDescriptor.cs" />
     <Compile Include="KnownTypes.cs" />
     <Compile Include="Metadata\CategoryEditorAttribute.cs" />
     <Compile Include="Metadata\CategoryOrderAttribute.cs" />
