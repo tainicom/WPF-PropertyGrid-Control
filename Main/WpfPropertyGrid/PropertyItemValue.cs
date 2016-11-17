@@ -92,6 +92,9 @@ namespace tainicom.WpfPropertyGrid
       {
         object value = property.GetValue();
 
+        if(value == null)
+            return;
+
         PropertyDescriptorCollection descriptors = property.Converter.GetProperties(context, value); 
         foreach (PropertyDescriptor d in descriptors)
         {

@@ -225,8 +225,15 @@ namespace tainicom.WpfPropertyGrid
         
         if (hasExclusiveStandardValues)
         {
-            var standardValues = propertyItem.Converter.GetStandardValues(context);
-            return new TypeEditor(propertyItem.PropertyType, EditorKeys.EnumEditorKey);
+            try
+            {
+                var standardValues = propertyItem.Converter.GetStandardValues(context);
+                return new TypeEditor(propertyItem.PropertyType, EditorKeys.EnumEditorKey);
+            }
+            catch(NotImplementedException)
+            {
+                /* failed to get standardValues. Not an Enum? */
+            }
         }
 
         return new TypeEditor(propertyItem.PropertyType, EditorKeys.DefaultEditorKey);
