@@ -46,7 +46,7 @@ namespace tainicom.WpfPropertyGrid.Themes
       if (!isInitialized)
       {
         this.isInitialized = true;
-        Uri resourceLocator = new Uri("/System.Windows.Controls.WpfPropertyGrid.Themes;component/Kaxaml/Theme.xaml", UriKind.Relative);
+        Uri resourceLocator = new Uri("/tainicom.WpfPropertyGrid.Themes;component/Kaxaml/Theme.xaml", UriKind.Relative);
         Application.LoadComponent(this, resourceLocator);
       }
     }
