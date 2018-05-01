@@ -163,7 +163,7 @@
     <Setter Property="Foreground" Value="#DDD"/>
     <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
     <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-    <Setter Property="MinWidth" Value="100"/>
+    <Setter Property="MinWidth" Value="0"/>
     <Setter Property="MinHeight" Value="18"/>
     <Setter Property="AllowDrop" Value="true"/>
     <Setter Property="pg:TextBoxExtender.SelectAllOnFocus" Value="True"/>
@@ -195,7 +195,7 @@
     <Setter Property="Foreground" Value="#DDD"/>
     <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
     <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-    <Setter Property="MinWidth" Value="100"/>
+    <Setter Property="MinWidth" Value="0"/>
     <Setter Property="MinHeight" Value="18"/>
     <Setter Property="AllowDrop" Value="true"/>
     <Setter Property="Template">
@@ -546,7 +546,7 @@
     <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
     <Setter Property="Foreground" Value="#DDD"/>
     <Setter Property="MinHeight" Value="20"/>
-    <Setter Property="MinWidth" Value="70"/>
+    <Setter Property="MinWidth" Value="0"/>
     <!--<Setter Property="ItemContainerStyle" Value="{DynamicResource ComboBoxItem}"/>-->
     <Setter Property="ItemsPanel">
       <Setter.Value>
