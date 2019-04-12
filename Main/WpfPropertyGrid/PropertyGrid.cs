@@ -831,18 +831,18 @@ namespace tainicom.WpfPropertyGrid
               : new PropertyItem(this, SelectedObject, descriptor);
 
             //item.OverrideIsBrowsable(new bool?(ShoudDisplayProperty(descriptor)));
-            item.IsBrowsable = ShoudDisplayProperty(descriptor);
+            item.IsBrowsable = ShoudDisplayProperty(item, descriptor);
 
             return item;
         }
 
-        private bool ShoudDisplayProperty(PropertyDescriptor propertyDescriptor)
+        private bool ShoudDisplayProperty(PropertyItem propertyItem, PropertyDescriptor propertyDescriptor)
         {
             Debug.Assert(propertyDescriptor != null);
             if (propertyDescriptor == null) return false;
 
             // Check whether owning category is not restricted to ouput
-            var showWithinCategory = ShouldDisplayCategory(propertyDescriptor.Category);
+            var showWithinCategory = ShouldDisplayCategory(propertyItem.CategoryName);
             if (!showWithinCategory) return false;
 
             // Check the explicit declaration
@@ -907,7 +907,10 @@ namespace tainicom.WpfPropertyGrid
                     category = categories[property.CategoryName];
                 else
                 {
-                    category = CreateCategory(property.GetAttribute<CategoryAttribute>());
+                    if (property.InterfaceCategoryAttribute != null)
+                        category = CreateCategory(property.InterfaceCategoryAttribute);
+                    else
+                        category = CreateCategory(property.GetAttribute<CategoryAttribute>());                    
 
                     if (category == null)
                     {

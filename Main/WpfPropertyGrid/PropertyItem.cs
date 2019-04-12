@@ -141,6 +141,8 @@ namespace tainicom.WpfPropertyGrid
       _categoryName = descriptor.Category;
       _isLocalizable = descriptor.IsLocalizable;
       
+      CategoryNameFromInterface(component, descriptor, ref _categoryName, ref _interfaceCategoryAttribute);
+      
       _metadata = new AttributesContainer(descriptor.Attributes);
       _descriptor.AddValueChanged(component, ComponentValueChanged);      
     }
@@ -152,6 +154,35 @@ namespace tainicom.WpfPropertyGrid
     protected PropertyItem(PropertyItemValue parentValue)
     {
       _parentValue = parentValue;
+    }
+
+    protected void CategoryNameFromInterface(object component, PropertyDescriptor descriptor, ref string categoryName, ref CategoryAttribute categoryAttribute)
+    {
+        if (categoryName != "Misc")
+            return;
+
+        Type componentType = component.GetType();        
+        var interfaceTypes = componentType.GetInterfaces();
+        foreach (var interfaceType in interfaceTypes)
+        {
+            var interfaceProperties = TypeDescriptor.GetProperties(interfaceType);
+            foreach (PropertyDescriptor interfaceProperty in interfaceProperties)
+            {
+                if (interfaceProperty.PropertyType == descriptor.PropertyType && interfaceProperty.Name == descriptor.Name)
+                {
+                    var interfaceCategoryName = interfaceProperty.Category;
+                    if (interfaceCategoryName == "Misc")
+                        continue;
+                    var interfaceCategoryAttribute = interfaceProperty.Attributes[typeof(CategoryAttribute)];
+                    if (interfaceCategoryAttribute == null)
+                        continue;
+
+                    categoryName = interfaceCategoryName;
+                    categoryAttribute = (CategoryAttribute)interfaceCategoryAttribute;
+                    return;
+                }
+            }
+        }
     }
         
     private void ComponentValueChanged(object sender, EventArgs e)
@@ -219,6 +250,12 @@ namespace tainicom.WpfPropertyGrid
     {
       get { return _categoryName; }
     } 
+    
+    private readonly CategoryAttribute _interfaceCategoryAttribute;
+    internal CategoryAttribute InterfaceCategoryAttribute
+    {
+        get { return _interfaceCategoryAttribute; }
+    }
     #endregion
 
     #region Description
