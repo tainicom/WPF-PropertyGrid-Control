@@ -551,6 +551,7 @@ namespace tainicom.WpfPropertyGrid
 
         if (PropertyType == typeof(object) ||
           value == null && PropertyType.IsClass ||
+          value == null && PropertyType.IsInterface ||
           value != null && PropertyType.IsAssignableFrom(value.GetType()))
         {
           SetValueCore(value);
