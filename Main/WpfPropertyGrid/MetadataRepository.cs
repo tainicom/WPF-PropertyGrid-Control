@@ -253,15 +253,16 @@ namespace tainicom.WpfPropertyGrid
       {
         result = new PropertySet();
 
-        foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(target, PropertyFilter))
         {
-          result.Add(descriptor.Name, new PropertyData(descriptor));
-          CollectAttributes(target, descriptor);
-        }
+          foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(target, PropertyFilter))
+          {
+            result.Add(descriptor.Name, new PropertyData(descriptor));
+            CollectAttributes(target, descriptor);
+          }
 
-        // get non-public browsable properties
-        foreach (var propertyInfo in targetType.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic))
-        {
+          // get non-public browsable properties
+          foreach (var propertyInfo in targetType.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic))
+          {
             var browsable = false;
             foreach(var attribute in propertyInfo.GetCustomAttributes(true))
             {
@@ -274,6 +275,7 @@ namespace tainicom.WpfPropertyGrid
             var descriptor = new tainicom.WpfPropertyGrid.Internal.NonPublicPropertyDescriptor(propertyInfo);
             result.Add(descriptor.Name, new PropertyData(descriptor));
             CollectAttributes(target, descriptor);
+          }
         }
 
 
