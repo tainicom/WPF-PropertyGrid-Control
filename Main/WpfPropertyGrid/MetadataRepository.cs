@@ -253,6 +253,17 @@ namespace tainicom.WpfPropertyGrid
       {
         result = new PropertySet();
 
+        // testing custom properties for objects with TypeConverter
+        //var typeConverter = TypeDescriptor.GetConverter(targetType);
+        //if (typeConverter.GetPropertiesSupported(null)) // has custom Properties?
+        //{
+        //  foreach (PropertyDescriptor descriptor in typeConverter.GetProperties(null, target, PropertyFilter))
+        //  {
+        //    result.Add(descriptor.Name, new PropertyData(descriptor));
+        //    CollectAttributes(target, descriptor);
+        //  }
+        //}
+        //else
         {
           foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(target, PropertyFilter))
           {
