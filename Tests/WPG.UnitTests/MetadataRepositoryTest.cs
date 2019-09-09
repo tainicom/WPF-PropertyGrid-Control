@@ -43,35 +43,35 @@ namespace WpfPropertyGrid.UnitTests
     [TestInitialize]
     public void Initialize()
     {
-      MetadataRepository.Clear();
+      MetadataRepository.Instance.Clear();
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentNullException))]
     public void ShouldFailCollectingProperties_1()
     {
-      MetadataRepository.GetProperties(null);
+        MetadataRepository.Instance.GetProperties(null);
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentNullException))]
     public void ShouldFailCollectingProperties_2()
     {
-      MetadataRepository.GetProperty(null, "property");
+        MetadataRepository.Instance.GetProperty(null, "property");
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentNullException))]
     public void ShouldFailCollectingProperties_3()
     {
-      MetadataRepository.GetProperty(typeof(MyEntity), null);
+        MetadataRepository.Instance.GetProperty(typeof(MyEntity), null);
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentNullException))]
     public void ShouldFailCollectingTypeAttributes()
     {
-      MetadataRepository.GetAttributes(null);
+        MetadataRepository.Instance.GetAttributes(null);
     }
 
 
@@ -79,20 +79,20 @@ namespace WpfPropertyGrid.UnitTests
     [ExpectedException(typeof(ArgumentNullException))]
     public void ShouldFailCollectingPropertyAttributes_1()
     {
-      MetadataRepository.GetAttributes(null, "property");
+        MetadataRepository.Instance.GetAttributes(null, "property");
     }
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentNullException))]
     public void ShouldFailCollectingPropertyAttributes_2()
     {
-      MetadataRepository.GetAttributes(typeof(MyEntity), null);
+        MetadataRepository.Instance.GetAttributes(typeof(MyEntity), null);
     }
 
     [TestMethod]
     public void ShouldCollectProperties()
     {
-      List<PropertyData> properties = MetadataRepository.GetProperties(new MyEntity()).ToList();
+      List<PropertyData> properties = MetadataRepository.Instance.GetProperties(new MyEntity()).ToList();
       Assert.AreEqual<int>(2, properties.Count);
 
       PropertyData data = properties[0];
@@ -111,7 +111,7 @@ namespace WpfPropertyGrid.UnitTests
     [TestMethod]
     public void ShouldFetchPropertyByName()
     {
-      PropertyData property = MetadataRepository.GetProperty(new MyEntity(), "FirstName");
+      PropertyData property = MetadataRepository.Instance.GetProperty(new MyEntity(), "FirstName");
       Assert.IsNotNull(property);
       Assert.AreEqual<string>("FirstName", property.Name);
     }
@@ -119,13 +119,13 @@ namespace WpfPropertyGrid.UnitTests
     [TestMethod]
     public void ShouldReturnNullForMissingProperty()
     {
-      Assert.IsNull(MetadataRepository.GetProperty(new MyEntity(), "MISSING"));
+      Assert.IsNull(MetadataRepository.Instance.GetProperty(new MyEntity(), "MISSING"));
     }
 
     [TestMethod]
     public void ShouldCollectTypeAttributes()
     {
-      List<Attribute> attributes = MetadataRepository.GetAttributes(new MyEntity()).ToList();
+      List<Attribute> attributes = MetadataRepository.Instance.GetAttributes(new MyEntity()).ToList();
       Assert.AreEqual<int>(1, attributes.Count);
 
       MyCustomAttribute attr = attributes[0] as MyCustomAttribute;
@@ -136,7 +136,7 @@ namespace WpfPropertyGrid.UnitTests
     [TestMethod]
     public void ShouldCollectCommonProperties()
     {
-      List<PropertyData> properties = MetadataRepository.GetCommonProperties(new object[] { new MyEntity(), new MyEntity2() }).ToList();
+      List<PropertyData> properties = MetadataRepository.Instance.GetCommonProperties(new object[] { new MyEntity(), new MyEntity2() }).ToList();
       Assert.AreEqual<int>(1, properties.Count);
       Assert.AreEqual<string>("FirstName", properties[0].Name);
     }
@@ -144,15 +144,15 @@ namespace WpfPropertyGrid.UnitTests
     [TestMethod]
     public void ShouldReturnEmptyPropertyCollection()
     {
-      IEnumerable<PropertyData> properties = MetadataRepository.GetCommonProperties(null);
+      IEnumerable<PropertyData> properties = MetadataRepository.Instance.GetCommonProperties(null);
       Assert.IsNotNull(properties);
       Assert.AreEqual<int>(0, properties.Count());
 
-      properties = MetadataRepository.GetCommonProperties(new object[] { new MyEmptyClass() });
+      properties = MetadataRepository.Instance.GetCommonProperties(new object[] { new MyEmptyClass() });
       Assert.IsNotNull(properties);
       Assert.AreEqual<int>(0, properties.Count());
 
-      properties = MetadataRepository.GetCommonProperties(Enumerable.Empty<object>());
+      properties = MetadataRepository.Instance.GetCommonProperties(Enumerable.Empty<object>());
       Assert.IsNotNull(properties);
       Assert.AreEqual<int>(0, properties.Count());
     }
@@ -160,7 +160,7 @@ namespace WpfPropertyGrid.UnitTests
     [TestMethod]
     public void ShouldReturnEmptyCollectionForMissingProperty()
     {
-      IEnumerable<Attribute> properties = MetadataRepository.GetAttributes(new MyEntity(), "Missing");
+      IEnumerable<Attribute> properties = MetadataRepository.Instance.GetAttributes(new MyEntity(), "Missing");
       Assert.IsNotNull(properties);
       Assert.AreEqual<int>(0, properties.Count());
     }
@@ -168,13 +168,13 @@ namespace WpfPropertyGrid.UnitTests
     [TestMethod]
     public void ShouldReturnPropertyAttributes()
     {
-      List<Attribute> attributes = MetadataRepository.GetAttributes(new MyEntity(), "FirstName").ToList();
+      List<Attribute> attributes = MetadataRepository.Instance.GetAttributes(new MyEntity(), "FirstName").ToList();
       Assert.AreEqual<int>(7, attributes.Count);
 
-      MetadataRepository.Clear();
+      MetadataRepository.Instance.Clear();
 
-      MetadataRepository.GetProperties(new MyEntity());
-      attributes = MetadataRepository.GetAttributes(new MyEntity(), "FirstName").ToList();
+      MetadataRepository.Instance.GetProperties(new MyEntity());
+      attributes = MetadataRepository.Instance.GetAttributes(new MyEntity(), "FirstName").ToList();
       Assert.AreEqual<int>(7, attributes.Count);
     }
   }

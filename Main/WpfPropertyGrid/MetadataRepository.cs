@@ -174,19 +174,35 @@ namespace tainicom.WpfPropertyGrid
         #endregion
     }
 
-    public static class MetadataRepository
+    public class MetadataRepository
     {
         private class PropertySet : Dictionary<string, PropertyData> { }
         private class AttributeSet : Dictionary<string, HashSet<Attribute>> { }
 
-        private static readonly Dictionary<Type, PropertySet> Properties = new Dictionary<Type, PropertySet>();
-        private static readonly Dictionary<Type, AttributeSet> PropertyAttributes = new Dictionary<Type, AttributeSet>();
-        private static readonly Dictionary<Type, HashSet<Attribute>> TypeAttributes = new Dictionary<Type, HashSet<Attribute>>();
+        private readonly Dictionary<Type, PropertySet> Properties = new Dictionary<Type, PropertySet>();
+        private readonly Dictionary<Type, AttributeSet> PropertyAttributes = new Dictionary<Type, AttributeSet>();
+        private readonly Dictionary<Type, HashSet<Attribute>> TypeAttributes = new Dictionary<Type, HashSet<Attribute>>();
 
         private static readonly Attribute[] PropertyFilter = new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.SetValues | PropertyFilterOptions.UnsetValues | PropertyFilterOptions.Valid) };
 
+        #region Singleton
+        private static MetadataRepository _instance;
+        public static MetadataRepository Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new MetadataRepository();
+                return _instance;
+            }
+        }
+        #endregion
 
-        public static void Clear()
+        private MetadataRepository()
+        {
+        }
+
+        public void Clear()
         {
             Properties.Clear();
             PropertyAttributes.Clear();
@@ -195,12 +211,12 @@ namespace tainicom.WpfPropertyGrid
 
         #region Property Management
 
-        public static IEnumerable<PropertyData> GetProperties(object target)
+        public IEnumerable<PropertyData> GetProperties(object target)
         {
             return DoGetProperties(target).ToList().AsReadOnly();
         }
 
-        private static IEnumerable<PropertyData> DoGetProperties(object target)
+        private IEnumerable<PropertyData> DoGetProperties(object target)
         {
             if (target == null) throw new ArgumentNullException("target");
 
@@ -211,7 +227,7 @@ namespace tainicom.WpfPropertyGrid
             return result.Values;
         }
 
-        public static IEnumerable<PropertyData> GetCommonProperties(IEnumerable<object> targets)
+        public IEnumerable<PropertyData> GetCommonProperties(IEnumerable<object> targets)
         {
             if (targets == null) return Enumerable.Empty<PropertyData>();
 
@@ -226,7 +242,7 @@ namespace tainicom.WpfPropertyGrid
             return (result != null) ? result : Enumerable.Empty<PropertyData>();
         }
 
-        public static PropertyData GetProperty(object target, string propertyName)
+        public PropertyData GetProperty(object target, string propertyName)
         {
             if (target == null) throw new ArgumentNullException("target");
             if (string.IsNullOrEmpty(propertyName)) throw new ArgumentNullException("propertyName");
@@ -244,7 +260,7 @@ namespace tainicom.WpfPropertyGrid
             return null;
         }
 
-        private static PropertySet CollectProperties(object target)
+        private PropertySet CollectProperties(object target)
         {
             Type targetType = target.GetType();
             PropertySet result;
@@ -300,14 +316,14 @@ namespace tainicom.WpfPropertyGrid
 
         #region Attribute Management
 
-        public static IEnumerable<Attribute> GetAttributes(object target)
+        public IEnumerable<Attribute> GetAttributes(object target)
         {
             if (target == null) throw new ArgumentNullException("target");
 
             return CollectAttributes(target).ToList().AsReadOnly();
         }
 
-        private static HashSet<Attribute> CollectAttributes(object target)
+        private HashSet<Attribute> CollectAttributes(object target)
         {
             Type targetType = target.GetType();
             HashSet<Attribute> attributes;
@@ -325,7 +341,7 @@ namespace tainicom.WpfPropertyGrid
             return attributes;
         }
 
-        private static HashSet<Attribute> CollectAttributes(object target, PropertyDescriptor descriptor)
+        private HashSet<Attribute> CollectAttributes(object target, PropertyDescriptor descriptor)
         {
             Type targetType = target.GetType();
             AttributeSet attributeSet;
@@ -352,7 +368,7 @@ namespace tainicom.WpfPropertyGrid
             return attributes;
         }
 
-        public static IEnumerable<Attribute> GetAttributes(object target, string propertyName)
+        public IEnumerable<Attribute> GetAttributes(object target, string propertyName)
         {
             if (target == null) throw new ArgumentNullException("target");
             if (string.IsNullOrEmpty(propertyName)) throw new ArgumentNullException("propertyName");

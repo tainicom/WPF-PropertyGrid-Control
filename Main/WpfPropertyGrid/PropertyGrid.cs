@@ -940,7 +940,7 @@ namespace tainicom.WpfPropertyGrid
 
             // TODO: PropertyItem is to be wired with PropertyData rather than pure PropertyDescriptor in the next version!
             var descriptors = (components.Count == 1)
-              ? MetadataRepository.GetProperties(components[0]).Select(prop => prop.Descriptor)
+              ? MetadataRepository.Instance.GetProperties(components[0]).Select(prop => prop.Descriptor)
               : ObjectServices.GetMergedProperties(components);
 
             IList<PropertyItem> propertyCollection = new List<PropertyItem>();

@@ -173,10 +173,10 @@ namespace tainicom.WpfPropertyGrid
             */
 
             var merged = new List<PropertyDescriptor>();
-            var props = MetadataRepository.GetCommonProperties(targets);
+            var props = MetadataRepository.Instance.GetCommonProperties(targets);
             foreach (var pData in props)
             {
-                var descriptors = targets.Select(target => MetadataRepository.GetProperty(target, pData.Name).Descriptor);
+                var descriptors = targets.Select(target => MetadataRepository.Instance.GetProperty(target, pData.Name).Descriptor);
                 merged.Add(new MergedPropertyDescriptor(descriptors.ToArray()));
             }
 
