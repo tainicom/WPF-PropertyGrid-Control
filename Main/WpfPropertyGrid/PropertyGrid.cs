@@ -140,7 +140,7 @@ namespace tainicom.WpfPropertyGrid
 
         private List<BrowsablePropertyAttribute> browsableProperties = new List<BrowsablePropertyAttribute>();
         private List<BrowsableCategoryAttribute> browsableCategories = new List<BrowsableCategoryAttribute>();
-        
+
         #endregion
 
         #region Events
@@ -194,20 +194,20 @@ namespace tainicom.WpfPropertyGrid
         public object SelectedObject
         {
             get { return (SelectedObjects != null && SelectedObjects.Count != 0) ? SelectedObjects[0] : null; }
-            set 
+            set
             {
                 if (BindingOperations.IsDataBound(this, SelectedObjectsProperty))
                     throw new Exception("Setting 'SelectedObject' is not allowed. 'SelectedObjects' has Binding.");
-                SelectedObjects = (value == null) ? new List<object>(0): new List<object>() { value }; 
+                SelectedObjects = (value == null) ? new List<object>(0) : new List<object>() { value };
             }
         }
 
         public static readonly DependencyProperty SelectedObjectsProperty = DependencyProperty.Register(
                     "SelectedObjects",
-                    typeof (IList<object>),
-                    typeof (PropertyGrid),
+                    typeof(IList<object>),
+                    typeof(PropertyGrid),
                     new PropertyMetadata(new List<object>(), OnSelectedObjectsChanged));
- 
+
         /// <summary>
         /// Gets or sets the selected objects.
         /// </summary>
@@ -215,8 +215,8 @@ namespace tainicom.WpfPropertyGrid
         public IList<object> SelectedObjects
         {
             get { return (IList<object>)GetValue(SelectedObjectsProperty); }
-            set 
-            {   
+            set
+            {
                 VerifySelectedObjects(value); // Ensure there are no nulls in the array                
 
                 // Check whether new selection is the same as was previously defined
@@ -248,10 +248,10 @@ namespace tainicom.WpfPropertyGrid
             PropertyGrid _this = (PropertyGrid)sender;
             _this.DoReload();
             _this.OnPropertyChanged("SelectedObjects");
-            _this.OnPropertyChanged("SelectedObject");   
+            _this.OnPropertyChanged("SelectedObject");
             _this.OnSelectedObjectsChanged();
         }
-       
+
         #endregion
 
         #region Properties
@@ -519,7 +519,7 @@ namespace tainicom.WpfPropertyGrid
 
 
 
-        
+
 
         private GridEntryCollection<PropertyItem> _properties;
         /// <summary>
@@ -910,7 +910,7 @@ namespace tainicom.WpfPropertyGrid
                     if (property.InterfaceCategoryAttribute != null)
                         category = CreateCategory(property.InterfaceCategoryAttribute);
                     else
-                        category = CreateCategory(property.GetAttribute<CategoryAttribute>());                    
+                        category = CreateCategory(property.GetAttribute<CategoryAttribute>());
 
                     if (category == null)
                     {

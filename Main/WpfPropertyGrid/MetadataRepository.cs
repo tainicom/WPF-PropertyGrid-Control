@@ -23,14 +23,14 @@ using System;
 
 namespace tainicom.WpfPropertyGrid
 {
-  [DebuggerDisplay("{Name}")]
-  // For the moment this class is a wrapper around PropertyDescriptor. Later on it will be migrated into a separate independent unit.
-  // It will be able in future creating dynamic objects without using reflection
-  public class PropertyData : IEquatable<PropertyData>
-  {
-    #region Fields
+    [DebuggerDisplay("{Name}")]
+    // For the moment this class is a wrapper around PropertyDescriptor. Later on it will be migrated into a separate independent unit.
+    // It will be able in future creating dynamic objects without using reflection
+    public class PropertyData : IEquatable<PropertyData>
+    {
+        #region Fields
 
-    private static readonly List<Type> CultureInvariantTypes = new List<Type> 
+        private static readonly List<Type> CultureInvariantTypes = new List<Type> 
     { 
       KnownTypes.Wpf.CornerRadius,
       KnownTypes.Wpf.Point3D, 
@@ -51,329 +51,329 @@ namespace tainicom.WpfPropertyGrid
       KnownTypes.Wpf.Vector     
     };
 
-    private static readonly string[] StringConverterMembers = { "Content", "Header", "ToolTip", "Tag" };
+        private static readonly string[] StringConverterMembers = { "Content", "Header", "ToolTip", "Tag" };
 
-    #endregion
+        #endregion
 
-    public PropertyDescriptor Descriptor { get; private set; }
+        public PropertyDescriptor Descriptor { get; private set; }
 
-    public string Name
-    {
-      get { return Descriptor.Name; }
-    }
-
-    public string DisplayName
-    {
-      get { return Descriptor.DisplayName; }
-    }
-
-    public string Description
-    {
-      get { return Descriptor.Description; }
-    }
-
-    public string Category
-    {
-      get { return Descriptor.Category; }
-    }
-
-    public Type PropertyType
-    {
-      get { return Descriptor.PropertyType; }
-    }
-
-    public Type ComponentType
-    {
-      get { return Descriptor.ComponentType; }
-    }
-
-    public bool IsBrowsable
-    {
-      get { return Descriptor.IsBrowsable; }
-    }
-
-    public bool IsReadOnly
-    {
-      get { return Descriptor.IsReadOnly; }
-    }
-
-    // TODO: Cache value?
-    public bool IsMergable
-    {
-      get { return MergablePropertyAttribute.Yes.Equals(Descriptor.Attributes[KnownTypes.Attributes.MergablePropertyAttribute]); }
-    }
-
-    // TODO: Cache value?
-    public bool IsAdvanced
-    {
-      get
-      {
-        var attr = Descriptor.Attributes[KnownTypes.Attributes.EditorBrowsableAttribute] as EditorBrowsableAttribute;
-        return attr != null && attr.State == EditorBrowsableState.Advanced;
-      }
-    }
-
-    public bool IsLocalizable
-    {
-      get { return Descriptor.IsLocalizable; }
-    }
-
-    public bool IsCollection
-    {
-      get { return KnownTypes.Collections.IList.IsAssignableFrom(this.PropertyType); }
-    }
-
-    public DesignerSerializationVisibility SerializationVisibility
-    {
-      get { return Descriptor.SerializationVisibility; }
-    }
-
-    private CultureInfo _SerializationCulture;
-    public CultureInfo SerializationCulture
-    {
-      get
-      {
-        if (_SerializationCulture == null)
+        public string Name
         {
-          _SerializationCulture = (CultureInvariantTypes.Contains(PropertyType) || KnownTypes.Wpf.Geometry.IsAssignableFrom(PropertyType))
-            ? CultureInfo.InvariantCulture
-            : CultureInfo.CurrentCulture;
+            get { return Descriptor.Name; }
         }
 
-        return _SerializationCulture;
-      }
-    }
-
-    public PropertyData(PropertyDescriptor descriptor)
-    {
-      Descriptor = descriptor;
-    }
-
-    #region System.Object overrides
-
-    public override int GetHashCode()
-    {
-      return Descriptor.GetHashCode();
-    }
-
-    public override bool Equals(object obj)
-    {
-      PropertyData data = obj as PropertyData;
-      return (data != null) ? Descriptor.Equals(data.Descriptor) : false;
-    }
-
-    #endregion
-
-    #region IEquatable<PropertyData> Members
-
-    public bool Equals(PropertyData other)
-    {
-      return Descriptor.Equals(other.Descriptor);
-    }
-
-    #endregion
-  }
-
-  public static class MetadataRepository
-  {
-    private class PropertySet : Dictionary<string, PropertyData> { }
-    private class AttributeSet : Dictionary<string, HashSet<Attribute>> { }
-
-    private static readonly Dictionary<Type, PropertySet> Properties = new Dictionary<Type, PropertySet>();
-    private static readonly Dictionary<Type, AttributeSet> PropertyAttributes = new Dictionary<Type, AttributeSet>();
-    private static readonly Dictionary<Type, HashSet<Attribute>> TypeAttributes = new Dictionary<Type, HashSet<Attribute>>();
-
-    private static readonly Attribute[] PropertyFilter = new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.SetValues | PropertyFilterOptions.UnsetValues | PropertyFilterOptions.Valid) };
-
-
-    public static void Clear()
-    {
-      Properties.Clear();
-      PropertyAttributes.Clear();
-      TypeAttributes.Clear();
-    }
-
-    #region Property Management
-
-    public static IEnumerable<PropertyData> GetProperties(object target)
-    {
-      return DoGetProperties(target).ToList().AsReadOnly();
-    }
-
-    private static IEnumerable<PropertyData> DoGetProperties(object target)
-    {
-      if (target == null) throw new ArgumentNullException("target");
-
-      PropertySet result;
-      if (!Properties.TryGetValue(target.GetType(), out result))
-        result = CollectProperties(target);
-
-      return result.Values;
-    }
-
-    public static IEnumerable<PropertyData> GetCommonProperties(IEnumerable<object> targets)
-    {
-      if (targets == null) return Enumerable.Empty<PropertyData>();
-
-      IEnumerable<PropertyData> result = null;
-
-      foreach (object target in targets)
-      {
-        var properties = DoGetProperties(target).Where(prop => prop.IsBrowsable && prop.IsMergable);
-        result = (result == null) ? properties : result.Intersect(properties);
-      }
-
-      return (result != null) ? result : Enumerable.Empty<PropertyData>();
-    }
-
-    public static PropertyData GetProperty(object target, string propertyName)
-    {
-      if (target == null) throw new ArgumentNullException("target");
-      if (string.IsNullOrEmpty(propertyName)) throw new ArgumentNullException("propertyName");
-
-      PropertySet propertySet = null;
-
-      if (!Properties.TryGetValue(target.GetType(), out propertySet))
-        propertySet = CollectProperties(target);
-
-      PropertyData property;
-
-      if (propertySet.TryGetValue(propertyName, out property))
-        return property;
-
-      return null;
-    }
-
-    private static PropertySet CollectProperties(object target)
-    {
-      Type targetType = target.GetType();
-      PropertySet result;
-
-      if (!Properties.TryGetValue(targetType, out result))
-      {
-        result = new PropertySet();
-
-        // testing custom properties for objects with TypeConverter
-        //var typeConverter = TypeDescriptor.GetConverter(targetType);
-        //if (typeConverter.GetPropertiesSupported(null)) // has custom Properties?
-        //{
-        //  foreach (PropertyDescriptor descriptor in typeConverter.GetProperties(null, target, PropertyFilter))
-        //  {
-        //    result.Add(descriptor.Name, new PropertyData(descriptor));
-        //    CollectAttributes(target, descriptor);
-        //  }
-        //}
-        //else
+        public string DisplayName
         {
-          foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(target, PropertyFilter))
-          {
-            result.Add(descriptor.Name, new PropertyData(descriptor));
-            CollectAttributes(target, descriptor);
-          }
+            get { return Descriptor.DisplayName; }
+        }
 
-          // get non-public browsable properties
-          foreach (var propertyInfo in targetType.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic))
-          {
-            var browsable = false;
-            foreach(var attribute in propertyInfo.GetCustomAttributes(true))
+        public string Description
+        {
+            get { return Descriptor.Description; }
+        }
+
+        public string Category
+        {
+            get { return Descriptor.Category; }
+        }
+
+        public Type PropertyType
+        {
+            get { return Descriptor.PropertyType; }
+        }
+
+        public Type ComponentType
+        {
+            get { return Descriptor.ComponentType; }
+        }
+
+        public bool IsBrowsable
+        {
+            get { return Descriptor.IsBrowsable; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return Descriptor.IsReadOnly; }
+        }
+
+        // TODO: Cache value?
+        public bool IsMergable
+        {
+            get { return MergablePropertyAttribute.Yes.Equals(Descriptor.Attributes[KnownTypes.Attributes.MergablePropertyAttribute]); }
+        }
+
+        // TODO: Cache value?
+        public bool IsAdvanced
+        {
+            get
             {
-                if (attribute is BrowsableAttribute && ((BrowsableAttribute)attribute).Browsable)
-                    browsable = true;
-                if (attribute is EditorBrowsableAttribute && ((EditorBrowsableAttribute)attribute).State != EditorBrowsableState.Never)
-                    browsable = true;
+                var attr = Descriptor.Attributes[KnownTypes.Attributes.EditorBrowsableAttribute] as EditorBrowsableAttribute;
+                return attr != null && attr.State == EditorBrowsableState.Advanced;
             }
-            if (!browsable) continue;
-            var descriptor = new tainicom.WpfPropertyGrid.Internal.NonPublicPropertyDescriptor(propertyInfo);
-            result.Add(descriptor.Name, new PropertyData(descriptor));
-            CollectAttributes(target, descriptor);
-          }
         }
 
+        public bool IsLocalizable
+        {
+            get { return Descriptor.IsLocalizable; }
+        }
 
-        Properties.Add(targetType, result);
-      }
+        public bool IsCollection
+        {
+            get { return KnownTypes.Collections.IList.IsAssignableFrom(this.PropertyType); }
+        }
 
-      return result;
+        public DesignerSerializationVisibility SerializationVisibility
+        {
+            get { return Descriptor.SerializationVisibility; }
+        }
+
+        private CultureInfo _SerializationCulture;
+        public CultureInfo SerializationCulture
+        {
+            get
+            {
+                if (_SerializationCulture == null)
+                {
+                    _SerializationCulture = (CultureInvariantTypes.Contains(PropertyType) || KnownTypes.Wpf.Geometry.IsAssignableFrom(PropertyType))
+                      ? CultureInfo.InvariantCulture
+                      : CultureInfo.CurrentCulture;
+                }
+
+                return _SerializationCulture;
+            }
+        }
+
+        public PropertyData(PropertyDescriptor descriptor)
+        {
+            Descriptor = descriptor;
+        }
+
+        #region System.Object overrides
+
+        public override int GetHashCode()
+        {
+            return Descriptor.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            PropertyData data = obj as PropertyData;
+            return (data != null) ? Descriptor.Equals(data.Descriptor) : false;
+        }
+
+        #endregion
+
+        #region IEquatable<PropertyData> Members
+
+        public bool Equals(PropertyData other)
+        {
+            return Descriptor.Equals(other.Descriptor);
+        }
+
+        #endregion
     }
 
-    #endregion Property Management
-
-    #region Attribute Management
-
-    public static IEnumerable<Attribute> GetAttributes(object target)
+    public static class MetadataRepository
     {
-      if (target == null) throw new ArgumentNullException("target");
+        private class PropertySet : Dictionary<string, PropertyData> { }
+        private class AttributeSet : Dictionary<string, HashSet<Attribute>> { }
 
-      return CollectAttributes(target).ToList().AsReadOnly();
+        private static readonly Dictionary<Type, PropertySet> Properties = new Dictionary<Type, PropertySet>();
+        private static readonly Dictionary<Type, AttributeSet> PropertyAttributes = new Dictionary<Type, AttributeSet>();
+        private static readonly Dictionary<Type, HashSet<Attribute>> TypeAttributes = new Dictionary<Type, HashSet<Attribute>>();
+
+        private static readonly Attribute[] PropertyFilter = new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.SetValues | PropertyFilterOptions.UnsetValues | PropertyFilterOptions.Valid) };
+
+
+        public static void Clear()
+        {
+            Properties.Clear();
+            PropertyAttributes.Clear();
+            TypeAttributes.Clear();
+        }
+
+        #region Property Management
+
+        public static IEnumerable<PropertyData> GetProperties(object target)
+        {
+            return DoGetProperties(target).ToList().AsReadOnly();
+        }
+
+        private static IEnumerable<PropertyData> DoGetProperties(object target)
+        {
+            if (target == null) throw new ArgumentNullException("target");
+
+            PropertySet result;
+            if (!Properties.TryGetValue(target.GetType(), out result))
+                result = CollectProperties(target);
+
+            return result.Values;
+        }
+
+        public static IEnumerable<PropertyData> GetCommonProperties(IEnumerable<object> targets)
+        {
+            if (targets == null) return Enumerable.Empty<PropertyData>();
+
+            IEnumerable<PropertyData> result = null;
+
+            foreach (object target in targets)
+            {
+                var properties = DoGetProperties(target).Where(prop => prop.IsBrowsable && prop.IsMergable);
+                result = (result == null) ? properties : result.Intersect(properties);
+            }
+
+            return (result != null) ? result : Enumerable.Empty<PropertyData>();
+        }
+
+        public static PropertyData GetProperty(object target, string propertyName)
+        {
+            if (target == null) throw new ArgumentNullException("target");
+            if (string.IsNullOrEmpty(propertyName)) throw new ArgumentNullException("propertyName");
+
+            PropertySet propertySet = null;
+
+            if (!Properties.TryGetValue(target.GetType(), out propertySet))
+                propertySet = CollectProperties(target);
+
+            PropertyData property;
+
+            if (propertySet.TryGetValue(propertyName, out property))
+                return property;
+
+            return null;
+        }
+
+        private static PropertySet CollectProperties(object target)
+        {
+            Type targetType = target.GetType();
+            PropertySet result;
+
+            if (!Properties.TryGetValue(targetType, out result))
+            {
+                result = new PropertySet();
+
+                // testing custom properties for objects with TypeConverter
+                //var typeConverter = TypeDescriptor.GetConverter(targetType);
+                //if (typeConverter.GetPropertiesSupported(null)) // has custom Properties?
+                //{
+                //  foreach (PropertyDescriptor descriptor in typeConverter.GetProperties(null, target, PropertyFilter))
+                //  {
+                //    result.Add(descriptor.Name, new PropertyData(descriptor));
+                //    CollectAttributes(target, descriptor);
+                //  }
+                //}
+                //else
+                {
+                    foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(target, PropertyFilter))
+                    {
+                        result.Add(descriptor.Name, new PropertyData(descriptor));
+                        CollectAttributes(target, descriptor);
+                    }
+
+                    // get non-public browsable properties
+                    foreach (var propertyInfo in targetType.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic))
+                    {
+                        var browsable = false;
+                        foreach (var attribute in propertyInfo.GetCustomAttributes(true))
+                        {
+                            if (attribute is BrowsableAttribute && ((BrowsableAttribute)attribute).Browsable)
+                                browsable = true;
+                            if (attribute is EditorBrowsableAttribute && ((EditorBrowsableAttribute)attribute).State != EditorBrowsableState.Never)
+                                browsable = true;
+                        }
+                        if (!browsable) continue;
+                        var descriptor = new tainicom.WpfPropertyGrid.Internal.NonPublicPropertyDescriptor(propertyInfo);
+                        result.Add(descriptor.Name, new PropertyData(descriptor));
+                        CollectAttributes(target, descriptor);
+                    }
+                }
+
+
+                Properties.Add(targetType, result);
+            }
+
+            return result;
+        }
+
+        #endregion Property Management
+
+        #region Attribute Management
+
+        public static IEnumerable<Attribute> GetAttributes(object target)
+        {
+            if (target == null) throw new ArgumentNullException("target");
+
+            return CollectAttributes(target).ToList().AsReadOnly();
+        }
+
+        private static HashSet<Attribute> CollectAttributes(object target)
+        {
+            Type targetType = target.GetType();
+            HashSet<Attribute> attributes;
+
+            if (!TypeAttributes.TryGetValue(targetType, out attributes))
+            {
+                attributes = new HashSet<Attribute>();
+
+                foreach (Attribute attribute in TypeDescriptor.GetAttributes(target))
+                    attributes.Add(attribute);
+
+                TypeAttributes.Add(targetType, attributes);
+            }
+
+            return attributes;
+        }
+
+        private static HashSet<Attribute> CollectAttributes(object target, PropertyDescriptor descriptor)
+        {
+            Type targetType = target.GetType();
+            AttributeSet attributeSet;
+
+            if (!PropertyAttributes.TryGetValue(targetType, out attributeSet))
+            {
+                // Create an empty attribute sequence
+                attributeSet = new AttributeSet();
+                PropertyAttributes.Add(targetType, attributeSet);
+            }
+
+            HashSet<Attribute> attributes;
+
+            if (!attributeSet.TryGetValue(descriptor.Name, out attributes))
+            {
+                attributes = new HashSet<Attribute>();
+
+                foreach (Attribute attribute in descriptor.Attributes)
+                    attributes.Add(attribute);
+
+                attributeSet.Add(descriptor.Name, attributes);
+            }
+
+            return attributes;
+        }
+
+        public static IEnumerable<Attribute> GetAttributes(object target, string propertyName)
+        {
+            if (target == null) throw new ArgumentNullException("target");
+            if (string.IsNullOrEmpty(propertyName)) throw new ArgumentNullException("propertyName");
+
+            Type targetType = target.GetType();
+
+            if (!PropertyAttributes.ContainsKey(targetType))
+                CollectProperties(target);
+
+            AttributeSet attributeSet;
+
+            if (PropertyAttributes.TryGetValue(targetType, out attributeSet))
+            {
+                HashSet<Attribute> result;
+                if (attributeSet.TryGetValue(propertyName, out result))
+                    return result.ToList().AsReadOnly();
+            }
+
+            return Enumerable.Empty<Attribute>();
+        }
+
+        #endregion Attribute Management
     }
-
-    private static HashSet<Attribute> CollectAttributes(object target)
-    {
-      Type targetType = target.GetType();
-      HashSet<Attribute> attributes;
-
-      if (!TypeAttributes.TryGetValue(targetType, out attributes))
-      {
-        attributes = new HashSet<Attribute>();
-
-        foreach (Attribute attribute in TypeDescriptor.GetAttributes(target))
-          attributes.Add(attribute);
-
-        TypeAttributes.Add(targetType, attributes);
-      }
-
-      return attributes;
-    }
-
-    private static HashSet<Attribute> CollectAttributes(object target, PropertyDescriptor descriptor)
-    {
-      Type targetType = target.GetType();
-      AttributeSet attributeSet;
-
-      if (!PropertyAttributes.TryGetValue(targetType, out attributeSet))
-      {
-        // Create an empty attribute sequence
-        attributeSet = new AttributeSet();
-        PropertyAttributes.Add(targetType, attributeSet);
-      }
-
-      HashSet<Attribute> attributes;
-
-      if (!attributeSet.TryGetValue(descriptor.Name, out attributes))
-      {
-        attributes = new HashSet<Attribute>();
-
-        foreach (Attribute attribute in descriptor.Attributes)
-          attributes.Add(attribute);
-
-        attributeSet.Add(descriptor.Name, attributes);
-      }
-
-      return attributes;
-    }
-
-    public static IEnumerable<Attribute> GetAttributes(object target, string propertyName)
-    {
-      if (target == null) throw new ArgumentNullException("target");
-      if (string.IsNullOrEmpty(propertyName)) throw new ArgumentNullException("propertyName");
-
-      Type targetType = target.GetType();
-
-      if (!PropertyAttributes.ContainsKey(targetType))
-        CollectProperties(target);
-
-      AttributeSet attributeSet;
-
-      if (PropertyAttributes.TryGetValue(targetType, out attributeSet))
-      {
-        HashSet<Attribute> result;
-        if (attributeSet.TryGetValue(propertyName, out result))
-          return result.ToList().AsReadOnly();
-      }
-
-      return Enumerable.Empty<Attribute>();
-    }
-
-    #endregion Attribute Management
-  }
 }
