@@ -45,7 +45,7 @@ namespace WpfPropertyGrid.UnitTests
         [TestInitialize]
         public void Initialize()
         {
-            metadataRepository = MetadataRepository.Instance;
+            metadataRepository = new MetadataRepository();
             metadataRepository.Clear();
         }
 

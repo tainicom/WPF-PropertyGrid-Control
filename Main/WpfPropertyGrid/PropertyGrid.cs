@@ -141,7 +141,7 @@ namespace tainicom.WpfPropertyGrid
         private List<BrowsablePropertyAttribute> browsableProperties = new List<BrowsablePropertyAttribute>();
         private List<BrowsableCategoryAttribute> browsableCategories = new List<BrowsableCategoryAttribute>();
 
-        private MetadataRepository metadataRepository = MetadataRepository.Instance;
+        private MetadataRepository metadataRepository = new MetadataRepository();
 
         #endregion
 

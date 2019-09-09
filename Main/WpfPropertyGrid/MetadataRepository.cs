@@ -185,20 +185,7 @@ namespace tainicom.WpfPropertyGrid
 
         private static readonly Attribute[] PropertyFilter = new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.SetValues | PropertyFilterOptions.UnsetValues | PropertyFilterOptions.Valid) };
 
-        #region Singleton
-        private static MetadataRepository _instance;
-        public static MetadataRepository Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    _instance = new MetadataRepository();
-                return _instance;
-            }
-        }
-        #endregion
-
-        private MetadataRepository()
+        internal MetadataRepository()
         {
         }
 
