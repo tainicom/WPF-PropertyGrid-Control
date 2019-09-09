@@ -82,6 +82,7 @@ namespace tainicom.WpfPropertyGrid
                 browsableProperties = new List<BrowsablePropertyAttribute>(propertyAttributes);
 
                 // Collect categories and properties
+                metadataRepository.Clear();
                 var properties = CollectProperties(SelectedObjects);
 
                 // TODO: This needs more elegant implementation
