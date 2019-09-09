@@ -151,7 +151,7 @@ namespace tainicom.WpfPropertyGrid
         }
         */
 
-        internal static IEnumerable<PropertyDescriptor> GetMergedProperties(IEnumerable<object> targets)
+        internal static IEnumerable<PropertyDescriptor> GetMergedProperties(MetadataRepository metadataRepository, IEnumerable<object> targets)
         {
             // This is an obsolete code left for performance improvements demo. Will be removed in the future versions.
             /*
@@ -173,10 +173,10 @@ namespace tainicom.WpfPropertyGrid
             */
 
             var merged = new List<PropertyDescriptor>();
-            var props = MetadataRepository.Instance.GetCommonProperties(targets);
+            var props = metadataRepository.GetCommonProperties(targets);
             foreach (var pData in props)
             {
-                var descriptors = targets.Select(target => MetadataRepository.Instance.GetProperty(target, pData.Name).Descriptor);
+                var descriptors = targets.Select(target => metadataRepository.GetProperty(target, pData.Name).Descriptor);
                 merged.Add(new MergedPropertyDescriptor(descriptors.ToArray()));
             }
 
