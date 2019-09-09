@@ -179,9 +179,9 @@ namespace tainicom.WpfPropertyGrid
         private class PropertySet : Dictionary<string, PropertyData> { }
         private class AttributeSet : Dictionary<string, HashSet<Attribute>> { }
 
-        private readonly Dictionary<Type, PropertySet> Properties = new Dictionary<Type, PropertySet>();
-        private readonly Dictionary<Type, AttributeSet> PropertyAttributes = new Dictionary<Type, AttributeSet>();
-        private readonly Dictionary<Type, HashSet<Attribute>> TypeAttributes = new Dictionary<Type, HashSet<Attribute>>();
+        private readonly Dictionary<object, PropertySet> Properties = new Dictionary<object, PropertySet>();
+        private readonly Dictionary<object, AttributeSet> PropertyAttributes = new Dictionary<object, AttributeSet>();
+        private readonly Dictionary<object, HashSet<Attribute>> TypeAttributes = new Dictionary<object, HashSet<Attribute>>();
 
         private static readonly Attribute[] PropertyFilter = new Attribute[] { new PropertyFilterAttribute(PropertyFilterOptions.SetValues | PropertyFilterOptions.UnsetValues | PropertyFilterOptions.Valid) };
 
@@ -208,7 +208,7 @@ namespace tainicom.WpfPropertyGrid
             if (target == null) throw new ArgumentNullException("target");
 
             PropertySet result;
-            if (!Properties.TryGetValue(target.GetType(), out result))
+            if (!Properties.TryGetValue(target, out result))
                 result = CollectProperties(target);
 
             return result.Values;
@@ -236,7 +236,7 @@ namespace tainicom.WpfPropertyGrid
 
             PropertySet propertySet = null;
 
-            if (!Properties.TryGetValue(target.GetType(), out propertySet))
+            if (!Properties.TryGetValue(target, out propertySet))
                 propertySet = CollectProperties(target);
 
             PropertyData property;
@@ -249,15 +249,14 @@ namespace tainicom.WpfPropertyGrid
 
         private PropertySet CollectProperties(object target)
         {
-            Type targetType = target.GetType();
             PropertySet result;
 
-            if (!Properties.TryGetValue(targetType, out result))
+            if (!Properties.TryGetValue(target, out result))
             {
                 result = new PropertySet();
 
                 // testing custom properties for objects with TypeConverter
-                //var typeConverter = TypeDescriptor.GetConverter(targetType);
+                //var typeConverter = TypeDescriptor.GetConverter(target.GetType());
                 //if (typeConverter.GetPropertiesSupported(null)) // has custom Properties?
                 //{
                 //  foreach (PropertyDescriptor descriptor in typeConverter.GetProperties(null, target, PropertyFilter))
@@ -275,7 +274,7 @@ namespace tainicom.WpfPropertyGrid
                     }
 
                     // get non-public browsable properties
-                    foreach (var propertyInfo in targetType.GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic))
+                    foreach (var propertyInfo in target.GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic))
                     {
                         var browsable = false;
                         foreach (var attribute in propertyInfo.GetCustomAttributes(true))
@@ -293,7 +292,7 @@ namespace tainicom.WpfPropertyGrid
                 }
 
 
-                Properties.Add(targetType, result);
+                Properties.Add(target, result);
             }
 
             return result;
@@ -312,17 +311,16 @@ namespace tainicom.WpfPropertyGrid
 
         private HashSet<Attribute> CollectAttributes(object target)
         {
-            Type targetType = target.GetType();
             HashSet<Attribute> attributes;
 
-            if (!TypeAttributes.TryGetValue(targetType, out attributes))
+            if (!TypeAttributes.TryGetValue(target, out attributes))
             {
                 attributes = new HashSet<Attribute>();
 
                 foreach (Attribute attribute in TypeDescriptor.GetAttributes(target))
                     attributes.Add(attribute);
 
-                TypeAttributes.Add(targetType, attributes);
+                TypeAttributes.Add(target, attributes);
             }
 
             return attributes;
@@ -330,14 +328,13 @@ namespace tainicom.WpfPropertyGrid
 
         private HashSet<Attribute> CollectAttributes(object target, PropertyDescriptor descriptor)
         {
-            Type targetType = target.GetType();
             AttributeSet attributeSet;
 
-            if (!PropertyAttributes.TryGetValue(targetType, out attributeSet))
+            if (!PropertyAttributes.TryGetValue(target, out attributeSet))
             {
                 // Create an empty attribute sequence
                 attributeSet = new AttributeSet();
-                PropertyAttributes.Add(targetType, attributeSet);
+                PropertyAttributes.Add(target, attributeSet);
             }
 
             HashSet<Attribute> attributes;
@@ -360,14 +357,12 @@ namespace tainicom.WpfPropertyGrid
             if (target == null) throw new ArgumentNullException("target");
             if (string.IsNullOrEmpty(propertyName)) throw new ArgumentNullException("propertyName");
 
-            Type targetType = target.GetType();
-
-            if (!PropertyAttributes.ContainsKey(targetType))
+            if (!PropertyAttributes.ContainsKey(target))
                 CollectProperties(target);
 
             AttributeSet attributeSet;
 
-            if (PropertyAttributes.TryGetValue(targetType, out attributeSet))
+            if (PropertyAttributes.TryGetValue(target, out attributeSet))
             {
                 HashSet<Attribute> result;
                 if (attributeSet.TryGetValue(propertyName, out result))
