@@ -183,6 +183,13 @@ namespace tainicom.WpfPropertyGrid
       if (string.IsNullOrEmpty(collectionValue) && (value is IEnumerable))
         collectionValue = "(Collection)";
 
+      // override default collection-to-string with "(Collection:{Count})"
+      if (collectionValue == "(Collection)" && value is ICollection)
+      {
+          try { collectionValue = String.Format("(Collection:{0})", ((ICollection)value).Count); }
+          catch (NotImplementedException) { /*ignore*/ }
+      }
+
       return collectionValue;
     }
 
